@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark-neon">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="QuizPulse - An ultra-modern, interactive Quiz Web Application with rich categories, game modes, lifelines, analytics, and custom quiz builder.">
+  <meta name="keywords" content="quiz, trivia, web development, javascript quiz, educational games, interactive quiz builder">
+  <meta name="author" content="QuizPulse Team">
+  <meta name="theme-color" content="#0b0f19">
+
+  <title>QuizPulse - Next-Gen Interactive Quiz Platform</title>
+
+  <!-- Google Fonts Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/screens.css">
+  <link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+  <div id="app">
+    <!-- ==========================================================================
+         TOP NAVIGATION BAR
+         ========================================================================== -->
+    <header class="app-header">
+      <div class="header-content">
+        <a href="#home" class="brand-logo" onclick="window.app && window.app.switchView('home'); return false;">
+          <div class="logo-icon">⚡</div>
+          <div>
+            <span class="brand-title">QuizPulse</span>
+            <span class="brand-badge">PRO</span>
+          </div>
+        </a>
+
+        <nav>
+          <ul class="nav-links">
+            <li><button class="nav-btn active" data-view="home">🏠 Lobby</button></li>
+            <li><button class="nav-btn" data-view="creator">🛠️ Quiz Studio</button></li>
+            <li><button class="nav-btn" data-view="analytics">📊 Stats & Rank</button></li>
+            <li><button class="nav-btn" data-view="achievements">🏆 Badges</button></li>
+          </ul>
+        </nav>
+
+        <div class="header-actions">
+          <button class="icon-btn" id="btn-theme-toggle" title="Switch Theme" aria-label="Switch Theme">🎨</button>
+          <button class="icon-btn" id="btn-audio-toggle" title="Toggle Sound FX" aria-label="Toggle Sound FX">🔊</button>
+          <button class="icon-btn" id="btn-settings-open" title="Settings" aria-label="Settings">⚙️</button>
+          <button class="icon-btn" id="btn-help-open" title="Keyboard Shortcuts (?)" aria-label="Keyboard Shortcuts">❓</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- ==========================================================================
+         MAIN VIEW CONTAINER
+         ========================================================================== -->
+    <main class="main-container">
+
+      <!-- ==========================================
+           1. HOME / LOBBY VIEW
+           ========================================== -->
+      <section id="view-home" class="view-section active-view">
+        <div class="hero-section">
+          <div class="hero-pill">✨ Ultimate Brain Arena & Trivia Platform</div>
+          <h1 class="hero-title">Master Your Knowledge, One Question at a Time</h1>
+          <p class="hero-subtitle">Test your intellect across technology, cosmos, world history, and pop culture with live streak multipliers, interactive lifelines, and instant analytics.</p>
+        </div>
+
+        <!-- Game Modes Grid -->
+        <div class="section-header">
+          <h2 class="section-title">⚡ Select Gameplay Mode</h2>
+        </div>
+        <div class="modes-grid">
+          <div class="glass-card interactive-card mode-card mode-standard" data-mode="standard">
+            <span class="badge badge-easy mode-badge">Classic</span>
+            <div class="mode-icon">⏱️</div>
+            <div class="mode-title">Standard Timed</div>
+            <div class="mode-desc">Balanced gameplay with countdown timers, speed bonuses, answer streak combos, and full lifelines.</div>
+            <button class="btn btn-primary btn-sm btn-block">Play Standard ▶</button>
+          </div>
+
+          <div class="glass-card interactive-card mode-card mode-rapid" data-mode="rapid">
+            <span class="badge badge-hard mode-badge">High Stakes</span>
+            <div class="mode-icon">🔥</div>
+            <div class="mode-title">Rapid Fire (3 Lives)</div>
+            <div class="mode-desc">Sudden death challenge! 10-second fast timer, 3 lives maximum, and massive score multipliers.</div>
+            <button class="btn btn-accent btn-sm btn-block">Enter Sudden Death 🔥</button>
+          </div>
+
+          <div class="glass-card interactive-card mode-card mode-practice" data-mode="practice">
+            <span class="badge badge-medium mode-badge">Learn</span>
+            <div class="mode-icon">📖</div>
+            <div class="mode-title">Practice Mode</div>
+            <div class="mode-desc">Zero time pressure, unlimited hints, and instant step-by-step conceptual explanations for every question.</div>
+            <button class="btn btn-secondary btn-sm btn-block">Start Practice 💡</button>
+          </div>
+
+          <div class="glass-card interactive-card mode-card mode-custom" data-mode="custom">
+            <span class="badge badge-pill mode-badge">Studio</span>
+            <div class="mode-icon">🎴</div>
+            <div class="mode-title">Custom Deck Builder</div>
+            <div class="mode-desc">Craft your own quizzes, customize question types, and share or import quiz decks via JSON.</div>
+            <button class="btn btn-secondary btn-sm btn-block">Open Studio 🛠️</button>
+          </div>
+        </div>
+
+        <!-- Quick Play Filter & Customizer -->
+        <div class="glass-card filter-bar">
+          <div class="filter-group">
+            <span class="filter-label">Category:</span>
+            <div class="filter-pills" id="filter-category-pills">
+              <button class="filter-pill active" data-cat="all">All</button>
+              <button class="filter-pill" data-cat="web-dev">Web Dev</button>
+              <button class="filter-pill" data-cat="science">Science</button>
+              <button class="filter-pill" data-cat="general-knowledge">General</button>
+              <button class="filter-pill" data-cat="history-geo">History</button>
+              <button class="filter-pill" data-cat="math-logic">Math</button>
+              <button class="filter-pill" data-cat="pop-culture">Cinema</button>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <span class="filter-label">Difficulty:</span>
+            <div class="filter-pills" id="filter-difficulty-pills">
+              <button class="filter-pill active" data-diff="all">Any</button>
+              <button class="filter-pill" data-diff="easy">Easy</button>
+              <button class="filter-pill" data-diff="medium">Medium</button>
+              <button class="filter-pill" data-diff="hard">Hard</button>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <span class="filter-label">Length:</span>
+            <div class="filter-pills" id="filter-count-pills">
+              <button class="filter-pill" data-count="5">5 Qs</button>
+              <button class="filter-pill active" data-count="10">10 Qs</button>
+              <button class="filter-pill" data-count="15">15 Qs</button>
+              <button class="filter-pill" data-count="20">20 Qs</button>
+            </div>
+          </div>
+
+          <button class="btn btn-primary" id="btn-quick-start">🚀 Quick Start Game</button>
+        </div>
+
+        <!-- Categories Showcase Grid -->
+        <div class="section-header">
+          <h2 class="section-title">📚 Explore Subject Categories</h2>
+        </div>
+        <div class="categories-grid" id="categories-grid">
+          <!-- Populated by app.js -->
+        </div>
+
+        <!-- Custom Decks Showcase -->
+        <div class="section-header">
+          <h2 class="section-title">🎴 Custom Community & User Decks</h2>
+        </div>
+        <div id="custom-decks-home-list">
+          <!-- Populated by app.js -->
+        </div>
+      </section>
+
+      <!-- ==========================================
+           2. QUIZ ARENA VIEW
+           ========================================== -->
+      <section id="view-quiz" class="view-section">
+        <div class="arena-container">
+          <!-- Top Status Bar -->
+          <div class="arena-header">
+            <div class="arena-meta">
+              <span class="badge badge-pill" id="arena-category-pill">Technology</span>
+              <span class="progress-pill" id="arena-progress-pill">Q 1 / 10</span>
+              <div class="lives-container" id="arena-lives-container" style="display: none;">
+                <span>❤️</span><span>❤️</span><span>❤️</span>
+              </div>
+            </div>
+
+            <div class="arena-stats">
+              <div class="streak-badge" id="arena-streak-badge">
+                <span>🔥 Streak:</span>
+                <span id="arena-streak-val">0</span>
+              </div>
+              <div class="score-display">
+                <span>💎</span>
+                <span id="arena-score-val">0</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="arena-progress-track">
+            <div class="arena-progress-bar" id="arena-progress-bar"></div>
+          </div>
+
+          <!-- Question Card -->
+          <div class="glass-card question-card">
+            <div class="question-meta-top">
+              <div style="display: flex; gap: 0.5rem; align-items: center;">
+                <span class="badge badge-pill" id="question-type-badge">Single Choice</span>
+                <span class="badge badge-medium" id="question-difficulty-badge">Medium</span>
+              </div>
+
+              <!-- Radial Timer -->
+              <div class="timer-container" id="timer-box">
+                <svg class="timer-svg" viewBox="0 0 70 70">
+                  <circle class="timer-circle-bg" cx="35" cy="35" r="30" />
+                  <circle class="timer-circle-progress" id="timer-svg-circle" cx="35" cy="35" r="30" />
+                </svg>
+                <div class="timer-text" id="timer-seconds-text">15</div>
+              </div>
+            </div>
+
+            <!-- Question Title -->
+            <h2 class="question-title" id="question-title">Loading Question...</h2>
+
+            <!-- Optional Code Block Area -->
+            <div id="question-code-area" style="display: none;"></div>
+
+            <!-- Options Grid (Single, Multi, Boolean) -->
+            <div class="options-grid" id="options-container">
+              <!-- Populated dynamically -->
+            </div>
+
+            <!-- Multi-Select Submit Button -->
+            <div style="margin-top: 1.5rem; text-align: right;">
+              <button class="btn btn-primary" id="btn-submit-multi" style="display: none;" disabled>
+                Submit Selection (Enter) ➔
+              </button>
+            </div>
+
+            <!-- Text Input Area (Fill in the blank) -->
+            <div class="text-answer-box" id="text-answer-container" style="display: none;">
+              <input type="text" class="text-answer-input" id="text-answer-input" placeholder="Type your answer here..." autocomplete="off">
+              <button class="btn btn-primary" id="btn-submit-text">Submit ↵</button>
+            </div>
+
+            <!-- Explanation Drawer -->
+            <div class="explanation-drawer" id="explanation-drawer">
+              <div class="explanation-title">
+                <span>💡 Conceptual Breakdown</span>
+              </div>
+              <p class="explanation-text" id="explanation-text"></p>
+            </div>
+          </div>
+
+          <!-- Arena Action Footer & Lifelines -->
+          <div class="arena-actions">
+            <!-- Lifelines -->
+            <div class="lifelines-bar">
+              <button class="lifeline-btn" id="lifeline-fifty-fifty" title="50:50 (Hotkey: F)">
+                <span>✂️ 50:50</span>
+                <span class="lifeline-hotkey">F</span>
+              </button>
+              <button class="lifeline-btn" id="lifeline-hint" title="Smart Hint (Hotkey: H)">
+                <span>💡 Hint</span>
+                <span class="lifeline-hotkey">H</span>
+              </button>
+              <button class="lifeline-btn" id="lifeline-time-freeze" title="+15s Time Boost (Hotkey: T)">
+                <span>⏳ +15s</span>
+                <span class="lifeline-hotkey">T</span>
+              </button>
+              <button class="lifeline-btn" id="lifeline-skip" title="Skip Question (Hotkey: K)">
+                <span>⏭️ Skip</span>
+                <span class="lifeline-hotkey">K</span>
+              </button>
+            </div>
+
+            <!-- Next & Pause Buttons -->
+            <div style="display: flex; gap: 0.6rem;">
+              <button class="btn btn-secondary btn-sm" id="btn-pause-quiz">⏸️ Pause</button>
+              <button class="btn btn-primary" id="btn-next-question" style="display: none;">
+                Next Question ➔
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           3. RESULTS & REVIEW VIEW
+           ========================================== -->
+      <section id="view-results" class="view-section">
+        <div class="results-container">
+          <div class="glass-card results-hero-card">
+            <div class="results-trophy" id="results-trophy">🏆</div>
+            <h1 class="results-headline" id="results-headline">Outstanding Performance!</h1>
+            <p class="results-subhead" id="results-subhead">You completed the quiz with flying colors.</p>
+
+            <div class="results-stats-row">
+              <div class="stat-box">
+                <div class="stat-val" id="results-score-val" style="color: var(--accent-cyan);">1,850</div>
+                <div class="stat-lbl">Final Score</div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-val" id="results-accuracy-val" style="color: var(--accent-emerald);">90%</div>
+                <div class="stat-lbl">Accuracy</div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-val" id="results-streak-val" style="color: var(--accent-amber);">7x</div>
+                <div class="stat-lbl">Max Streak</div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-val" id="results-time-val" style="color: var(--accent-pink);">42s</div>
+                <div class="stat-lbl">Total Time</div>
+              </div>
+            </div>
+
+            <div class="results-btn-group">
+              <button class="btn btn-primary btn-lg" id="btn-play-again">🔄 Play Again</button>
+              <button class="btn btn-accent btn-lg" id="btn-certificate-open">📜 Get Certificate</button>
+              <button class="btn btn-secondary btn-lg" id="btn-share-score">📋 Share Score</button>
+              <button class="btn btn-secondary btn-lg" id="btn-results-lobby">🏠 Lobby</button>
+            </div>
+          </div>
+
+          <!-- Question Review Breakdown -->
+          <div class="section-header">
+            <h2 class="section-title">🔍 Comprehensive Question Review</h2>
+          </div>
+          <div class="review-list" id="results-review-list">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           4. CUSTOM QUIZ STUDIO VIEW
+           ========================================== -->
+      <section id="view-creator" class="view-section">
+        <div class="section-header">
+          <div>
+            <h1 class="section-title">🛠️ Custom Quiz Studio & Deck Builder</h1>
+            <p style="color: var(--text-secondary); margin-top: 0.25rem;">Create interactive quiz sets, define multiple choice or typing questions, and export/import decks via JSON.</p>
+          </div>
+          <div style="display: flex; gap: 0.6rem; flex-wrap: wrap;">
+            <button class="btn btn-secondary" id="btn-import-json-input">📂 Import JSON</button>
+            <input type="file" id="json-file-input" accept=".json" style="display: none;">
+            <button class="btn btn-secondary" id="btn-export-deck-json">📥 Export JSON</button>
+            <button class="btn btn-accent" id="btn-play-this-deck">▶ Test & Play Deck</button>
+          </div>
+        </div>
+
+        <div class="creator-layout">
+          <!-- Sidebar: Deck metadata & question list -->
+          <div class="creator-sidebar">
+            <div class="glass-card">
+              <h3 style="font-size: 1.1rem; margin-bottom: 1rem;">Deck Details</h3>
+              <div class="form-group">
+                <label class="form-label" for="creator-deck-title">Quiz Title</label>
+                <input type="text" class="form-input" id="creator-deck-title" placeholder="e.g. Modern React Mastery" value="My Custom Quiz">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="creator-deck-desc">Description</label>
+                <input type="text" class="form-input" id="creator-deck-desc" placeholder="Brief overview of the quiz topics..." value="Community custom trivia challenge">
+              </div>
+              <button class="btn btn-primary btn-block" id="btn-save-deck">💾 Save Quiz Deck</button>
+            </div>
+
+            <div class="glass-card">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                <h3 style="font-size: 1.1rem;">Questions List</h3>
+                <button class="btn btn-sm btn-secondary" id="btn-new-question">+ Add New</button>
+              </div>
+              <div class="creator-questions-list" id="creator-questions-list">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+
+            <div class="glass-card">
+              <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem;">Saved Local Decks</h3>
+              <div id="creator-saved-decks-list">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Main Question Builder Form -->
+          <div class="glass-card">
+            <h2 style="font-size: 1.3rem; margin-bottom: 1.25rem;">📝 Question Editor</h2>
+
+            <div class="form-group">
+              <label class="form-label" for="creator-form-question">Question Text *</label>
+              <textarea class="form-textarea" id="creator-form-question" rows="3" placeholder="Enter your question text here..."></textarea>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+              <div class="form-group">
+                <label class="form-label" for="creator-form-type">Question Type</label>
+                <select class="form-select" id="creator-form-type">
+                  <option value="single">Single Choice (One Correct Option)</option>
+                  <option value="multiple">Multi-Select (Multiple Correct Options)</option>
+                  <option value="boolean">True / False</option>
+                  <option value="text">Fill in the Blank / Typing</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="creator-form-difficulty">Difficulty Tier</label>
+                <select class="form-select" id="creator-form-difficulty">
+                  <option value="easy">Easy (100 pts)</option>
+                  <option value="medium" selected>Medium (200 pts)</option>
+                  <option value="hard">Hard (300 pts)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Dynamic Options Container -->
+            <div id="creator-options-group">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <label class="form-label" style="margin-bottom: 0;">Options (Check the correct answer radio/box)</label>
+                <button class="btn btn-sm btn-secondary" id="creator-add-option-btn" type="button" style="display: none;">+ Option</button>
+              </div>
+              <div id="creator-options-list">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+
+            <!-- Text Input Answers -->
+            <div id="creator-text-answer-group" style="display: none;">
+              <div class="form-group">
+                <label class="form-label" for="creator-acceptable-answers">Acceptable Answers (Comma separated)</label>
+                <input type="text" class="form-input" id="creator-acceptable-answers" placeholder="e.g. paris, city of light">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="creator-form-hint">Smart Hint (Optional)</label>
+              <input type="text" class="form-input" id="creator-form-hint" placeholder="Helpful clue for when players use the Hint lifeline...">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="creator-form-explanation">Explanation / Solution (Optional)</label>
+              <textarea class="form-textarea" id="creator-form-explanation" rows="2" placeholder="Why is this answer correct? Explain the concept..."></textarea>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+              <button class="btn btn-primary btn-lg" id="btn-save-question">✓ Add Question to Deck</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           5. ANALYTICS & STATS VIEW
+           ========================================== -->
+      <section id="view-analytics" class="view-section">
+        <div class="section-header">
+          <div>
+            <h1 class="section-title">📊 Analytics Dashboard & Leaderboard</h1>
+            <p style="color: var(--text-secondary); margin-top: 0.25rem;">Track your long-term quiz metrics, category mastery rates, and high score ranks.</p>
+          </div>
+          <button class="btn btn-danger btn-sm" id="btn-clear-all-data">🧹 Reset Stats</button>
+        </div>
+
+        <div class="stats-grid">
+          <div class="glass-card stat-card-highlight">
+            <div class="stat-lbl">Total Quizzes Completed</div>
+            <div class="stat-highlight-val" id="analytics-total-quizzes">0</div>
+            <span class="badge badge-pill">Games Played</span>
+          </div>
+
+          <div class="glass-card stat-card-highlight">
+            <div class="stat-lbl">Questions Answered</div>
+            <div class="stat-highlight-val" id="analytics-total-answered" style="color: var(--accent-emerald);">0</div>
+            <span class="badge badge-pill">Total Trivia Volume</span>
+          </div>
+
+          <div class="glass-card stat-card-highlight">
+            <div class="stat-lbl">Global Accuracy Rate</div>
+            <div class="stat-highlight-val" id="analytics-accuracy-pct" style="color: var(--accent-pink);">0%</div>
+            <span class="badge badge-pill">Precision Metric</span>
+          </div>
+
+          <div class="glass-card stat-card-highlight">
+            <div class="stat-lbl">All-Time Best Streak</div>
+            <div class="stat-highlight-val" id="analytics-best-streak" style="color: var(--accent-amber);">0x</div>
+            <span class="badge badge-pill">Combo High Watermark</span>
+          </div>
+
+          <div class="glass-card stat-card-highlight">
+            <div class="stat-lbl">Total Play Time</div>
+            <div class="stat-highlight-val" id="analytics-time-spent" style="color: var(--accent-cyan);">0m 0s</div>
+            <span class="badge badge-pill">Time Invested</span>
+          </div>
+        </div>
+
+        <!-- Category Mastery & High Scores Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+          <!-- Category Mastery Progress -->
+          <div class="glass-card">
+            <h3 style="font-size: 1.2rem; margin-bottom: 1.25rem;">📈 Category Mastery Breakdown</h3>
+            <div class="category-bars" id="analytics-category-bars">
+              <!-- Populated dynamically -->
+            </div>
+          </div>
+
+          <!-- Top 10 High Scores -->
+          <div class="glass-card">
+            <h3 style="font-size: 1.2rem; margin-bottom: 1.25rem;">🏆 Top 10 High Scores</h3>
+            <div class="table-container">
+              <table class="styled-table">
+                <thead>
+                  <tr>
+                    <th>Rank</th>
+                    <th>Category</th>
+                    <th>Score</th>
+                    <th>Accuracy</th>
+                    <th>Time</th>
+                  </tr>
+                </thead>
+                <tbody id="analytics-leaderboard-tbody">
+                  <!-- Populated dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Games History -->
+        <div class="glass-card">
+          <h3 style="font-size: 1.2rem; margin-bottom: 1.25rem;">🕒 Recent Gameplay History</h3>
+          <div class="table-container">
+            <table class="styled-table">
+              <thead>
+                <tr>
+                  <th>Topic</th>
+                  <th>Mode</th>
+                  <th>Score</th>
+                  <th>Accuracy</th>
+                  <th>Timestamp</th>
+                </tr>
+              </thead>
+              <tbody id="analytics-history-tbody">
+                <!-- Populated dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           6. ACHIEVEMENTS & BADGES VIEW
+           ========================================== -->
+      <section id="view-achievements" class="view-section">
+        <div class="section-header">
+          <div>
+            <h1 class="section-title">🏆 Badges & Unlockable Achievements</h1>
+            <p style="color: var(--text-secondary); margin-top: 0.25rem;">Earn prestige badges by accomplishing speed feats, high streaks, and broad mastery.</p>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-weight: 700; color: var(--accent-cyan); font-size: 1.1rem;" id="achievements-progress-text">0 / 12 Unlocked</div>
+            <div class="arena-progress-track" style="width: 180px; margin: 0.4rem 0 0 auto;">
+              <div class="arena-progress-bar" id="achievements-progress-bar" style="width: 0%;"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="achievements-grid" id="achievements-grid">
+          <!-- Populated dynamically -->
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ==========================================================================
+         FOOTER
+         ========================================================================== -->
+    <footer class="app-footer">
+      <div class="footer-content">
+        <div>
+          <strong>⚡ QuizPulse</strong> &copy; 2026. Built with Vanilla JS & Modern CSS. Zero dependencies.
+        </div>
+        <div class="footer-tags">
+          <span class="footer-pill">Web Audio API</span>
+          <span class="footer-pill">Canvas Particle Confetti</span>
+          <span class="footer-pill">LocalStorage Persistence</span>
+          <span class="footer-pill">GitHub Ready (MIT)</span>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ==========================================================================
+       MODALS & DIALOGS
+       ========================================================================== -->
+
+  <!-- Settings Modal -->
+  <div class="modal-overlay" id="modal-settings">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>⚙️ Game Settings</h2>
+        <span class="modal-close-btn">&times;</span>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="setting-volume-slider">Sound Effects Volume</label>
+        <input type="range" id="setting-volume-slider" min="0" max="1" step="0.05" value="0.5" style="width: 100%;">
+      </div>
+      <div class="form-group" style="display: flex; justify-content: space-between; align-items: center;">
+        <label class="form-label" for="setting-sound-toggle" style="margin-bottom: 0;">Enable Audio Sound FX</label>
+        <label class="toggle-switch">
+          <input type="checkbox" id="setting-sound-toggle" checked>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="setting-timer-input">Timer Duration (Seconds per Question)</label>
+        <input type="number" class="form-input" id="setting-timer-input" min="5" max="60" value="15">
+      </div>
+      <div class="form-group" style="display: flex; justify-content: space-between; align-items: center;">
+        <label class="form-label" for="setting-auto-advance" style="margin-bottom: 0;">Auto-Advance to Next Question</label>
+        <label class="toggle-switch">
+          <input type="checkbox" id="setting-auto-advance" checked>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+        <button class="btn btn-primary" id="btn-save-settings">Save & Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Themes Modal -->
+  <div class="modal-overlay" id="modal-themes">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>🎨 Choose Theme Palette</h2>
+        <span class="modal-close-btn">&times;</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div class="glass-card interactive-card theme-choice-card" data-theme-id="dark-neon">
+          <div style="font-size: 1.75rem; margin-bottom: 0.5rem;">🌌</div>
+          <strong>Dark Neon</strong>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">Midnight Slate with Indigo & Cyan Neon</p>
+        </div>
+        <div class="glass-card interactive-card theme-choice-card" data-theme-id="midnight-ocean">
+          <div style="font-size: 1.75rem; margin-bottom: 0.5rem;">🌊</div>
+          <strong>Midnight Ocean</strong>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">Deep Oceanic Navy with Teal Accents</p>
+        </div>
+        <div class="glass-card interactive-card theme-choice-card" data-theme-id="cyberpunk">
+          <div style="font-size: 1.75rem; margin-bottom: 0.5rem;">⚡</div>
+          <strong>Cyberpunk</strong>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">High Contrast Void with Hot Pink & Yellow</p>
+        </div>
+        <div class="glass-card interactive-card theme-choice-card" data-theme-id="light-minimal">
+          <div style="font-size: 1.75rem; margin-bottom: 0.5rem;">☀️</div>
+          <strong>Clean Light</strong>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">Crisp Minimal White with Royal Indigo</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hotkeys Help Modal -->
+  <div class="modal-overlay" id="modal-help">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>⌨️ Keyboard Shortcuts Guide</h2>
+        <span class="modal-close-btn">&times;</span>
+      </div>
+      <table class="styled-table" style="font-size: 0.9rem;">
+        <thead>
+          <tr>
+            <th>Key</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><kbd style="padding: 2px 6px; background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 4px;">1</kbd> - <kbd style="padding: 2px 6px; background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 4px;">4</kbd> (or <kbd>A</kbd>-<kbd>D</kbd>)</td><td>Select Answer Option 1 through 4</td></tr>
+          <tr><td><kbd style="padding: 2px 6px; background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 4px;">Space</kbd> / <kbd style="padding: 2px 6px; background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 4px;">Enter</kbd></td><td>Next Question / Submit Multi-Select Answer</td></tr>
+          <tr><td><kbd style="padding: 2px 6px; background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 4px;">H</kbd></td><td>Trigger "Smart Hint" Lifeline</td></tr>
+          <tr><td><kbd style="padding: 2px 6px; background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 4px;">F</kbd></td><td>Trigger "50:50" Lifeline</td></tr>
+          <tr><td><kbd style="padding: 2px 6px; background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 4px;">T</kbd></td><td>Trigger "+15s Time Boost" Lifeline</td></tr>
+          <tr><td><kbd style="padding: 2px 6px; background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 4px;">K</kbd></td><td>Trigger "Skip Question" Lifeline</td></tr>
+          <tr><td><kbd style="padding: 2px 6px; background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 4px;">P</kbd> / <kbd style="padding: 2px 6px; background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 4px;">Esc</kbd></td><td>Pause Quiz or Close Open Modal</td></tr>
+          <tr><td><kbd style="padding: 2px 6px; background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 4px;">?</kbd></td><td>Toggle This Shortcut Help Guide</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Pause Modal -->
+  <div class="modal-overlay" id="modal-pause">
+    <div class="modal-content" style="text-align: center;">
+      <h2 style="font-size: 2rem; margin-bottom: 0.5rem;">⏸️ Game Paused</h2>
+      <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Take a breath! The countdown timer is currently stopped.</p>
+      <div style="display: flex; justify-content: center; gap: 1rem;">
+        <button class="btn btn-primary btn-lg" id="btn-resume-quiz">▶ Resume Quiz</button>
+        <button class="btn btn-danger btn-lg" id="btn-quit-quiz">✕ Quit to Lobby</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Certificate Generator Modal -->
+  <div class="modal-overlay" id="modal-certificate">
+    <div class="modal-content" style="max-width: 780px;">
+      <div class="modal-header">
+        <h2>📜 Certificate of Achievement</h2>
+        <span class="modal-close-btn">&times;</span>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="cert-player-name-input">Recipient Full Name</label>
+        <div style="display: flex; gap: 0.6rem;">
+          <input type="text" class="form-input" id="cert-player-name-input" placeholder="e.g. Alex Johnson" value="Quiz Master">
+          <button class="btn btn-secondary" id="btn-generate-cert">Update Preview</button>
+        </div>
+      </div>
+      <div style="margin: 1.5rem 0; border: 1px solid var(--border-glass); border-radius: var(--radius-md); overflow: hidden; background: #000;">
+        <img id="cert-image-preview" src="" alt="Certificate Preview" style="width: 100%; display: block;">
+      </div>
+      <div style="display: flex; justify-content: flex-end; gap: 0.75rem;">
+        <button class="btn btn-secondary btn-modal-close">Close</button>
+        <button class="btn btn-primary" id="btn-download-cert">💾 Download High-Res Certificate (PNG)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container"></div>
+
+  <!-- Application Entrypoint Script (ES Modules) -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
